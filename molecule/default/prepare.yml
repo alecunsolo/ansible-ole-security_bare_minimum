@@ -1,0 +1,19 @@
+---
+- name: Prepare
+  hosts: all
+  vars:
+    ssh_service_name: '{{ ((ansible_os_family | lower) == "redhat") | ternary("sshd", "ssh")}}'
+  tasks:
+    - name: Update apt cache.
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+      when: ansible_os_family | lower == "debian"
+    - name: Install ssh package
+      ansible.builtin.package:
+        name: openssh-server
+        state: present
+    - name: Ensure ssh is up and running
+      ansible.builtin.service:
+        name: '{{ ssh_service_name }}'
+        state: started

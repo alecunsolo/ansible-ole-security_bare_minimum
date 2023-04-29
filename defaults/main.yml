@@ -1,2 +1,6 @@
 ---
-# defaults file for security_bare_minimum
+security_ssh_enabled: true
+security_ssh_template: sshd_default_template
+security_ssh_port: 22
+security_ssh_permit_root_login: prohibit-password
+security_ssh_pwd_auth: 'no'

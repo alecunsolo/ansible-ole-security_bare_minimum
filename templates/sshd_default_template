@@ -1,0 +1,5 @@
+{{ ansible_managed | comment }}
+Port {{ security_ssh_port}}
+PermitEmptyPasswords no
+PermitRootLogin {{ security_ssh_permit_root_login }}
+PasswordAuthentication {{ security_ssh_pwd_auth }}
