@@ -1,0 +1,2 @@
+---
+security_firewalld_dir: /etc/firewalld

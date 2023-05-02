@@ -1,0 +1,31 @@
+---
+- name: Set zone name variable.
+  ansible.builtin.set_fact:
+    zone_name: '{{ zone["zone_name"] }}'
+
+- name: Assign interfaces to zone {{ zone_name }}
+  ansible.posix.firewalld:
+    zone: '{{ zone_name }}'
+    interface: '{{ item["name"] }}'
+    state: '{{ item["state"] }}'
+    permanent: true
+    immediate: true
+  loop: '{{ zone["interfaces"] | default([]) }}'
+
+- name: Configure services for zone {{ zone_name }}
+  ansible.posix.firewalld:
+    zone: '{{ zone_name }}'
+    service: '{{ item["name"] }}'
+    state: '{{ item["state"] }}'
+    permanent: true
+    immediate: true
+  loop: '{{ zone["services"] | default([]) }}'
+
+- name: Configure ports for zone {{ zone_name }}
+  ansible.posix.firewalld:
+    zone: '{{ zone_name }}'
+    port: '{{ item["name"] }}'
+    state: '{{ item["state"] }}'
+    permanent: true
+    immediate: true
+  loop: '{{ zone["ports"] | default([]) }}'

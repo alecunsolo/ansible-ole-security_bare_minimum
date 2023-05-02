@@ -1,6 +1,10 @@
 ---
-# handlers file for security_bare_minimum
 - name: Restart ssh
   ansible.builtin.service:
     name: '{{ security_ssh_service }}'
     state: restarted
+
+- name: Reload firewalld
+  ansible.builtin.command:
+    cmd: firewall-cmd --reload
+  changed_when: false

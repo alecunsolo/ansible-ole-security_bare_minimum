@@ -4,3 +4,29 @@ security_ssh_template: sshd_default_template
 security_ssh_port: 22
 security_ssh_permit_root_login: prohibit-password
 security_ssh_pwd_auth: 'no'
+
+security_firewall_enabled: true
+security_firewalld_services: []
+
+security_firewall_config: []
+# - zone_name: dmz
+#   interfaces:
+#     - name: eth0
+#       state: present
+#   services:
+#     - name: syncthing
+#       state: enabled
+#     - name: ssh
+#       state: disabled
+#   ports:
+#     - name: 8090/tcp
+#       state: enabled
+# - zone_name: public
+#   services:
+#     - name: dns
+#       state: enabled
+#     - name: https
+#       state: disabled
+#   ports:
+#     - name: 8080/tcp
+#       state: enabled

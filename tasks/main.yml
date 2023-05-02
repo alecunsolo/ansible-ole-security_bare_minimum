@@ -7,6 +7,10 @@
     name: root
     password_lock: true
 
-- name: Configure SSH
+- name: Configure SSH.
   ansible.builtin.import_tasks: ssh.yml
   when: security_ssh_enabled
+
+- name: Configure firewall.
+  ansible.builtin.import_tasks: firewall.yml
+  when: security_firewall_enabled

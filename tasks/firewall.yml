@@ -1,0 +1,45 @@
+---
+- name: Ensure ufw is not installed.
+  ansible.builtin.package:
+    name: ufw
+    state: absent
+
+- name: Ensure firewalld and python bindings are installed.
+  ansible.builtin.package:
+    name: [firewalld, python3-firewall]
+    state: present
+
+- name: Ensure firewalld is running.
+  ansible.builtin.service:
+    name: firewalld.service
+    state: started
+    enabled: yes
+
+- name: Ensure custom services directory exists.
+  ansible.builtin.file:
+    dest: '{{ security_firewalld_dir }}/services'
+    state: directory
+    owner: root
+    group: root
+    mode: '0750'
+
+- name: Add custom services.
+  ansible.builtin.copy:
+    src: '{{ item }}'
+    dest: '{{ security_firewalld_dir }}/services/{{ item }}'
+    owner: root
+    group: root
+    mode: '0640'
+  loop: '{{ security_firewalld_services }}'
+  notify: Reload firewalld
+  register: security_fw_services_copied
+
+# Before we can use the custom services we need to reload firewalld.
+- name: Flush handlers.
+  ansible.builtin.meta: flush_handlers
+
+- name: Basic firewalld configuration.
+  ansible.builtin.include_tasks: firewalld_conf.yml
+  loop: '{{ security_firewall_config }}'
+  loop_control:
+    loop_var: zone
