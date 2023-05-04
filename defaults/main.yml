@@ -1,4 +1,6 @@
 ---
+security_lock_root: true
+
 security_ssh_enabled: true
 security_ssh_template: sshd_default_template
 security_ssh_port: 22

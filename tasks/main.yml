@@ -6,6 +6,7 @@
   ansible.builtin.user:
     name: root
     password_lock: true
+  when: security_lock_root
 
 - name: Configure SSH.
   ansible.builtin.import_tasks: ssh.yml
