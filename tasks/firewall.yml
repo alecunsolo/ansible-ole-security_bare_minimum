@@ -40,6 +40,6 @@
 
 - name: Basic firewalld configuration.
   ansible.builtin.include_tasks: firewalld_conf.yml
-  loop: '{{ security_firewall_config }}'
+  loop: '{{ security_firewalld_config }}'
   loop_control:
     loop_var: zone

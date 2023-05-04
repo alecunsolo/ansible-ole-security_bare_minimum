@@ -12,7 +12,7 @@ security_firewalld_services: []
 # - src: custom/file/directory/file.txt
 #   name: service.xml
 
-security_firewall_config: []
+security_firewalld_config: []
 # - zone_name: dmz
 #   interfaces:
 #     - name: eth0
