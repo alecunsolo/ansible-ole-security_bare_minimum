@@ -26,7 +26,7 @@
 - name: Add custom services.
   ansible.builtin.copy:
     src: '{{ item.src }}'
-    dest: '{{ security_firewalld_dir }}/services/{{ item.name }}'
+    dest: '{{ security_firewalld_dir }}/services/{{ item.name | default(item.src) }}'
     owner: root
     group: root
     mode: '0640'
