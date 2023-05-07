@@ -4,31 +4,80 @@
 Ansible Role: security_bare_minimum
 =========
 
-A brief description of the role goes here.
+Minimal security configuration. You can setup `ssh` and `firewalld`. I use [FreeIPA](https://www.freeipa.org) for user management and `sudo` access, so this role won't setup such things.
+
+**WARNING** You can lock yourself out (changing ssh port or misconfiguring firewalld) and have no more root access (if you choose to disable root password). Make sure to have a plan b.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+None.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```yaml
+security_lock_root: true
+```
+Whether to lock the root user password or not.
+```yaml
+security_ssh_enabled: true
+security_ssh_template: sshd_default_template
+security_ssh_port: 22
+security_ssh_permit_root_login: prohibit-password
+security_ssh_pwd_auth: 'no'
+```
+Basic `ssh` configuration. The options are added to a custom file included by the main `sshd` config. By default a basic template [sshd_default_template](templates/sshd_default_template) is used, but it can be changed to suit your needs.
+```yaml
+security_firewall_enabled: true
+security_firewalld_services: []
+# - src: custom/file/directory/file.txt
+#   name: service.xml
+
+security_firewalld_config: []
+# - zone_name: dmz
+#   interfaces:
+#     - name: eth0
+#       state: present
+#   services:
+#     - name: syncthing
+#       state: enabled
+#     - name: ssh
+#       state: disabled
+#   ports:
+#     - name: 8090/tcp
+#       state: enabled
+# - zone_name: public
+#   services:
+#     - name: dns
+#       state: enabled
+#     - name: https
+#       state: disabled
+#   ports:
+#     - name: 8080/tcp
+#       state: enabled
+```
+Basic `firewalld` configuration: you can add custom service definitions and configure some `zone` parameters (interfaces, services and ports).
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+`firewalld` is configured using the module `ansible.posix.firewalld`: you need to be sure to have the collection installed on the management host.
 
 Example Playbook
 ----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```yaml
+- name: Security
+  hosts: all
+  vars:
+    security_firewalld_services:
+      - src: unifi.xml
+        name: unifi.xml
+  tasks:
+    - name: Include security_bare_minimum.
+      ansible.builtin.include_role:
+        name: alecunsolo.security_bare_minimum
+```
 
 License
 -------
