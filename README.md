@@ -3,7 +3,10 @@
 
 Ansible Role: security_bare_minimum
 =========
+## DISCLAIMER
+After [this](https://www.redhat.com/en/blog/furthering-evolution-centos-stream) announcement I will not test on RHEL anymore.
 
+---------
 Minimal security configuration. You can setup `ssh` and `firewalld`. I use [FreeIPA](https://www.freeipa.org) for user management and `sudo` access, so this role won't setup such things.
 
 **WARNING** You can lock yourself out (changing ssh port or misconfiguring firewalld) and have no more root access (if you choose to disable root password). Make sure to have a plan b.
